@@ -8,7 +8,9 @@ import { IState } from "../rootReducer";
 export interface BasketState {
   calculatingBasketInApi: boolean;
   items: Array<BasketItem>,
-  total: number
+  total: number,
+  lastResponse: BasketItem | null,
+
 }
 
 export const initialState: BasketState = {
@@ -17,7 +19,8 @@ export const initialState: BasketState = {
     new BasketItem(1, 'Burger 1', 100),
     new BasketItem(2, 'Burger 2', 200),
   ],
-  total: 300
+  total: 300,
+  lastResponse: null,
 };
 
 export default function basketReducer(
@@ -40,6 +43,11 @@ export default function basketReducer(
         ...state,
         total: (action as ActionWithPayload<number>).payload
       }
+      case 'last-response':
+        return {
+          ...state,
+          lastResponse: (action as ActionWithPayload<BasketItem>).payload
+        }
 
     default:
       return state;

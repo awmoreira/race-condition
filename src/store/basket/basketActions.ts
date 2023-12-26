@@ -55,6 +55,10 @@ export function incrementItem(basketItem: BasketItem) {
       })
       .finally(() => {
         dispatch({
+          type: 'last-response',
+          payload: basketItem
+        });
+        dispatch({
           type: 'calculating_basket',
           payload: false
         });
@@ -70,7 +74,7 @@ export function decrementItem(basketItem: BasketItem) {
     // Call this same function after 3 seconds to avoid concurrency
     if (state.basket.calculatingBasketInApi) {
       return setTimeout(() => {
-        return incrementItem(basketItem)(dispatch, getState);
+        return decrementItem(basketItem)(dispatch, getState);
       }, 3000);
     }
 
@@ -119,6 +123,10 @@ export function decrementItem(basketItem: BasketItem) {
         });
       })
       .finally(() => {
+        dispatch({
+          type: 'last-response',
+          payload: basketItem
+        });
         dispatch({
           type: 'calculating_basket',
           payload: false
